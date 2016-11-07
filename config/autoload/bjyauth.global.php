@@ -7,7 +7,7 @@ return array(
         'role_providers' => array(
             // using an object repository (entity repository) to load all roles into our ACL
             'BjyAuthorize\Provider\Role\ObjectRepositoryProvider' => array(
-                'object_manager' => 'doctrine.entity_manager.orm_default',
+                'object_manager' => 'doctrine.entitymanager.orm_default',
                 'role_entity_class' => 'BookUser\Entity\Role',
             ),
         ),
@@ -17,7 +17,18 @@ return array(
              * You may omit the 'action' index to allow access to the entire controller
              */
             'BjyAuthorize\Guard\Controller' => array(
+                array(
+                    'controller' => 'zfcuser',
+                    'action' => array('index', 'login', 'authenticate', 'register'),
+                    'roles' => array('guest'),
+                ),
+                array(
+                    'controller' => 'zfcuser',
+                    'action' => array('logout'),
+                    'roles' => array('user'),
+                ),
 
+                array('controller' => 'Application\Controller\Index', 'roles' => array()),
             ),
         ),
     ),
