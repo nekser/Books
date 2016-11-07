@@ -1,0 +1,35 @@
+BookUser\Entity\User:
+  type: entity
+  table: users
+  id:
+    id:
+      type: integer
+      generator:
+        strategy: AUTO
+  fields:
+    username:
+      type: string
+      unique: true
+      nullable: false
+    email:
+      type: string
+      unique: true
+    displayName:
+      type: string
+      nullable: true
+    password:
+      type: string
+    state:
+      type: integer
+  manyToMany:
+    roles:
+      targetEntity: BookUser\Entity\Role
+      joinTable:
+        name: users_roles
+        joinColumns:
+          name: user_id
+          referencedColumnName: id
+        inverseJoinColumns:
+          name: role_id
+          referencedColumnName: id
+

@@ -1,0 +1,16 @@
+BookUser\Entity\Role:
+  type: entity
+  table: role
+  id:
+    id:
+      type: integer
+      generator:
+        strategy: AUTO
+  fields:
+    roleId:
+      type: string
+      nullable: true
+      unique: true
+  manyToOne:
+    parent:
+      targetEntity: BookUser\Entity\Role
