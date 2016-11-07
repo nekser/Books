@@ -10,7 +10,8 @@ return array(
         'ZendDeveloperTools',
         'DoctrineModule',
         'DoctrineORMModule',
-        'BookUser'
+        'BookUser',
+        'Library'
     ),
     'module_listener_options' => array(
         'module_paths' => array(
