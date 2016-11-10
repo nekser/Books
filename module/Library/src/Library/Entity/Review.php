@@ -8,6 +8,8 @@ class Review
     private $id;
     /** @var  string */
     private $text;
+    /** @var  \BookUser\Entity\User */
+    private $owner;
 
     /**
      * @return int
@@ -31,5 +33,21 @@ class Review
     public function setText($text)
     {
         $this->text = $text;
+    }
+
+    /**
+     * @return \BookUser\Entity\User
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
+     * @param \BookUser\Entity\User $owner
+     */
+    public function setOwner($owner)
+    {
+        $this->owner = $owner;
     }
 }

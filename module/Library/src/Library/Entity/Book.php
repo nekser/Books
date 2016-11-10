@@ -2,6 +2,8 @@
 
 namespace Library\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 class Book
 {
     /** @var  int */
@@ -9,11 +11,52 @@ class Book
     /** @var  string */
     private $name;
     /** @var  string */
+    private $author;
+    /** @var  string */
     private $description;
     /** @var  \Doctrine\Common\Collections\ArrayCollection */
     private $gallery;
-    /** @var string  */
+    /** @var string */
     private $file;
+    /** @var  ArrayCollection */
+    private $reviews;
+
+    public function __construct()
+    {
+        $this->reviews = new ArrayCollection();
+    }
+
+    /**
+     * @return string
+     */
+    public function getAuthor()
+    {
+        return $this->author;
+    }
+
+    /**
+     * @param string $author
+     */
+    public function setAuthor($author)
+    {
+        $this->author = $author;
+    }
+
+    /**
+     * @return array
+     */
+    public function getReviews()
+    {
+        return $this->reviews->getValues();
+    }
+
+    /**
+     * @param Review $review
+     */
+    public function addReview($review)
+    {
+        $this->reviews[] = $review;
+    }
 
     /**
      * @return int
