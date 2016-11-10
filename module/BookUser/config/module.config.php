@@ -19,6 +19,7 @@ return array(
         'user_entity_class'       => 'BookUser\Entity\User',
         // telling ZfcUserDoctrineORM to skip the entities it defines
         'enable_default_entities' => false,
+        'book_user_default_role' => 'user'
     ),
     'bjyauthorize' => array(
         // Using the authentication identity provider, which basically reads the roles from the auth service's identity

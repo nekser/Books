@@ -2,8 +2,17 @@
 
 namespace BookUser;
 
+use BookUser\Listener\BookUserListener;
+use Zend\Mvc\MvcEvent;
+
 class Module
 {
+    public function onBootstrap(MvcEvent $mvcEvent)
+    {
+        $em = $mvcEvent->getApplication()->getEventManager();
+        $em->attach(new BookUserListener());
+    }
+
     public function getAutoloaderConfig()
     {
         return array(

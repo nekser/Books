@@ -9,27 +9,33 @@ BookUser\Entity\User:
   fields:
     username:
       type: string
+      length: 255
       unique: true
-      nullable: false
+      nullable: true
     email:
       type: string
+      length: 255
       unique: true
+      nullable: true
     displayName:
       type: string
+      length: 50
       nullable: true
     password:
       type: string
+      length: 128
     state:
-      type: integer
+      type: smallint
+      nullable: true
   manyToMany:
     roles:
       targetEntity: BookUser\Entity\Role
       joinTable:
         name: users_roles
         joinColumns:
-          name: user_id
-          referencedColumnName: id
+          user_id:
+            referencedColumnName: id
         inverseJoinColumns:
-          name: role_id
-          referencedColumnName: id
+          role_id:
+            referencedColumnName: id
 
