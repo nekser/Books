@@ -129,4 +129,17 @@ class Book
     {
         $this->file = $file;
     }
+
+    /**
+     * @param object $data
+     * Helper function.
+     */
+    public function exchangeArray($data)
+    {
+        foreach ($data as $key => $val) {
+            if (property_exists($this, $key)) {
+                $this->$key = ($val !== null) ? $val : null;
+            }
+        }
+    }
 }

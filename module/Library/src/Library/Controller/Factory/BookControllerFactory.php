@@ -1,7 +1,7 @@
 <?php
 namespace Library\Controller\Factory;
 
-use Library\BookController\BookController;
+use Library\Controller\BookController;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 

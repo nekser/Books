@@ -27,6 +27,11 @@ return array(
                     'action' => array('logout'),
                     'roles' => array('user'),
                 ),
+                array(
+                    'controller' => 'BookController',
+                    'action' => array('add'),
+                    'roles' => array('guest')
+                ),
 
                 array('controller' => 'Application\Controller\Index', 'roles' => array()),
             ),
