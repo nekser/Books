@@ -1,3 +1,9 @@
+<?php $flash = $this->flashMessenger(); ?>
+<?php echo $flash->render('error',   array('alert', 'alert-dismissible', 'alert-danger')); ?>
+<?php echo $flash->render('info',    array('alert', 'alert-dismissible', 'alert-info')); ?>
+<?php echo $flash->render('default', array('alert', 'alert-dismissible', 'alert-warning')); ?>
+<?php echo $flash->render('success', array('alert', 'alert-dismissible', 'alert-success')); ?>
+
 <ul>
     <?php foreach ($this->books as $book): ?>
         <li><?php echo $book['name']; ?></li>

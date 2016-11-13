@@ -13,13 +13,9 @@ class BookForm extends Form
         $this->setAttribute('method', 'post');
         $this->setAttribute(
             'enctype',
-            'multipart/form- data'
+            'multipart/form-data'
         );
         $this->setInputFilter(new BookInputFilter());
-        $this->add(array(
-            'name' => 'security',
-            'type' => 'Zend\Form\Element\Csrf',
-        ));
         $this->add(array(
             'name' => 'id',
             'type' => 'hidden',

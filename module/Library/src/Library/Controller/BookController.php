@@ -12,11 +12,15 @@ class BookController extends AbstractActionController
         /** @var \Doctrine\ORM\EntityManager $em */
         $em = $this->getServiceLocator()
             ->get('doctrine.entitymanager.orm_default');
+        $auth = $this->getServiceLocator()
+            ->get('zfcuser_auth_service');
 
         $qb = $em->createQueryBuilder();
 
         $query = $qb->select('b')
             ->from('\Library\Entity\Book', 'b')
+            ->where($qb->expr()->eq('IDENTITY(b.user)', ':userId'))
+            ->setParameter('userId', $auth->getIdentity()->getId())
             ->getQuery();
 
         $books = $query->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
@@ -31,6 +35,7 @@ class BookController extends AbstractActionController
         $form = new BookForm();
         $form->get('submit')->setValue('Add');
 
+
         /**  @var \Zend\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
@@ -38,10 +43,15 @@ class BookController extends AbstractActionController
             if ($form->isValid()) {
                 /** @var \Doctrine\ORM\EntityManager $em */
                 $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+                $auth = $this->getServiceLocator()
+                    ->get('zfcuser_auth_service');
 
                 $book = new \Library\Entity\Book();
                 $book->exchangeArray($form->getData());
-//                $book->setCreated(time());
+                $book->setUser(
+                    $auth->getIdentity()
+                );
+
                 $em->persist($book);
                 $em->flush();
                 $message = 'Book succesfully created!';

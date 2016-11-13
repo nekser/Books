@@ -7,9 +7,14 @@ $this->headTitle($title);
 <?php
 /** @var Zend\Form\Form $form */
 $form = $this->form;
-$form->setAttribute('action', $this->url('book', array('actio<n' => 'add')));
+$form->setAttribute('action', $this->url('book', array('action' => 'add')));
 $form->prepare();
 ?>
+<?php $flash = $this->flashMessenger(); ?>
+<?php echo $flash->render('error',   array('alert', 'alert-dismissible', 'alert-danger')); ?>
+<?php echo $flash->render('info',    array('alert', 'alert-dismissible', 'alert-info')); ?>
+<?php echo $flash->render('default', array('alert', 'alert-dismissible', 'alert-warning')); ?>
+<?php echo $flash->render('success', array('alert', 'alert-dismissible', 'alert-success')); ?>
 <div class="container">
     <?php
     echo $this->form()->openTag($form);
