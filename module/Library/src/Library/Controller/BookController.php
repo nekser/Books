@@ -9,7 +9,21 @@ class BookController extends AbstractActionController
 {
     public function indexAction()
     {
-        return new ViewModel();
+        /** @var \Doctrine\ORM\EntityManager $em */
+        $em = $this->getServiceLocator()
+            ->get('doctrine.entitymanager.orm_default');
+
+        $qb = $em->createQueryBuilder();
+
+        $query = $qb->select('b')
+            ->from('\Library\Entity\Book', 'b')
+            ->getQuery();
+
+        $books = $query->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+        return new ViewModel(array(
+            'books' => $books
+        ));
     }
 
     public function addAction()
@@ -42,7 +56,7 @@ class BookController extends AbstractActionController
         return array('form' => $form);
     }
 
-    public function updateAction()
+    public function editAction()
     {
 
     }

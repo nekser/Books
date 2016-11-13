@@ -29,8 +29,8 @@ return array(
                 ),
                 array(
                     'controller' => 'BookController',
-                    'action' => array('add'),
-                    'roles' => array('guest')
+                    'action' => array('add', 'index'),
+                    'roles' => array('guest', 'user')
                 ),
 
                 array('controller' => 'Application\Controller\Index', 'roles' => array()),
