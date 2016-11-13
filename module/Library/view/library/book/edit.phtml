@@ -1,0 +1,37 @@
+<?php
+$title = $this->book->getName();
+$this->headTitle($title);
+//echo $this->showMessages();
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<?php
+/** @var Zend\Form\Form $form */
+$form = $this->form;
+$form->setAttribute('action', $this->url('book', array('action' => 'edit', 'id' =>  $this->book->getId())));
+$form->prepare();
+?>
+<?php $flash = $this->flashMessenger(); ?>
+<?php echo $flash->render('error', array('alert', 'alert-dismissible', 'alert-danger')); ?>
+<?php echo $flash->render('info', array('alert', 'alert-dismissible', 'alert-info')); ?>
+<?php echo $flash->render('default', array('alert', 'alert-dismissible', 'alert-warning')); ?>
+<?php echo $flash->render('success', array('alert', 'alert-dismissible', 'alert-success')); ?>
+<div class="container">
+    <?php
+    echo $this->form()->openTag($form);
+
+    echo $this->formHidden($form->get('id'));
+    ?>
+    <div class="form-group row">
+        <?php echo $this->formRow($form->get('name')); ?>
+    </div>
+    <div class="form-group row">
+        <?php echo $this->formRow($form->get('author')); ?>
+    </div>
+    <div class="form-group row">
+        <?php echo $this->formRow($form->get('description')); ?>
+    </div>
+    <div class="form-group row">
+        <?php echo $this->formSubmit($form->get('submit')); ?>
+    </div>
+    <?php echo $this->form()->closeTag(); ?>
+</div>

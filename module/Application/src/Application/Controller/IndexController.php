@@ -16,6 +16,19 @@ class IndexController extends AbstractActionController
 {
     public function indexAction()
     {
-        return new ViewModel();
+        $em = $this->getServiceLocator()
+            ->get('doctrine.entitymanager.orm_default');
+
+        $qb = $em->createQueryBuilder();
+
+        $query = $qb->select('b')
+            ->from('\Library\Entity\Book', 'b')
+            ->getQuery();
+
+        $books = $query->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+        return new ViewModel(array(
+            'books' => $books
+        ));
     }
 }

@@ -37,7 +37,6 @@
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Home') ?></a></li>
                 <!-- Test if the User is connected -->
                 <?php if (!$this->zfcUserIdentity()): ?>
                     <!-- display the login form -->
@@ -45,6 +44,9 @@
                         <a href="<?php echo $this->url('zfcuser/login'); ?>"><?php echo $this->translate('Login') ?></a>
                     </li>
                 <?php else: ?>
+                    <li>
+                        <a href="<?php echo $this->url('book'); ?>"><?php echo $this->translate('My Books') ?></a>
+                    </li>
                     <!-- display the 'display name' of the user -->
                     <li>
                         <a href="<?php echo $this->url('zfcuser/logout'); ?>"><?php echo $this->translate('Logout') ?></a>

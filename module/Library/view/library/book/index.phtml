@@ -1,11 +1,31 @@
+<?php
+$title = 'My books';
+$this->headTitle($title);
+//echo $this->showMessages();
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
 <?php $flash = $this->flashMessenger(); ?>
-<?php echo $flash->render('error',   array('alert', 'alert-dismissible', 'alert-danger')); ?>
-<?php echo $flash->render('info',    array('alert', 'alert-dismissible', 'alert-info')); ?>
+<?php echo $flash->render('error', array('alert', 'alert-dismissible', 'alert-danger')); ?>
+<?php echo $flash->render('info', array('alert', 'alert-dismissible', 'alert-info')); ?>
 <?php echo $flash->render('default', array('alert', 'alert-dismissible', 'alert-warning')); ?>
 <?php echo $flash->render('success', array('alert', 'alert-dismissible', 'alert-success')); ?>
 
-<ul>
+<table class="table table-hover">
+    <tbody>
     <?php foreach ($this->books as $book): ?>
-        <li><?php echo $book['name']; ?></li>
+        <tr>
+            <td>
+                <a href="<?php echo $this->url('book', array('action' => 'view', 'id' => $book['id'])); ?>">
+                    <?php echo $book['name']; ?>
+                </a>
+            </td>
+            <td>
+                <a class="btn btn-default" href="<?php echo $this->url('book', array('action' => 'edit', 'id' => $book['id'])); ?>">Edit</a>
+            </td>
+            <td>
+                <a class="btn btn-danger" href="<?php echo $this->url('book', array('action' => 'delete', 'id' => $book['id'])); ?>">Delete</a>
+            </td>
+        </tr>
     <?php endforeach; ?>
-</ul>
+    </tbody>
+</table>
