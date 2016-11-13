@@ -20,10 +20,28 @@ class Book
     private $file;
     /** @var  ArrayCollection */
     private $reviews;
+    /** @var  \BookUser\Entity\User */
+    private $user;
 
     public function __construct()
     {
         $this->reviews = new ArrayCollection();
+    }
+
+    /**
+     * @return \BookUser\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param \BookUser\Entity\User $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
     }
 
     /**

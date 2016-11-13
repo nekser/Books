@@ -9,7 +9,9 @@ class Review
     /** @var  string */
     private $text;
     /** @var  \BookUser\Entity\User */
-    private $owner;
+    private $user;
+    /** @var  \Library\Entity\Book */
+    private $book;
 
     /**
      * @return int
@@ -17,6 +19,22 @@ class Review
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return Book
+     */
+    public function getBook()
+    {
+        return $this->book;
+    }
+
+    /**
+     * @param Book $book
+     */
+    public function setBook($book)
+    {
+        $this->book = $book;
     }
 
     /**
@@ -38,16 +56,16 @@ class Review
     /**
      * @return \BookUser\Entity\User
      */
-    public function getOwner()
+    public function getUser()
     {
-        return $this->owner;
+        return $this->user;
     }
 
     /**
-     * @param \BookUser\Entity\User $owner
+     * @param \BookUser\Entity\User $user
      */
-    public function setOwner($owner)
+    public function setUser($user)
     {
-        $this->owner = $owner;
+        $this->user = $user;
     }
 }

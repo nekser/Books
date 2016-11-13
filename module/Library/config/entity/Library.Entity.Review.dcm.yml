@@ -1,29 +1,25 @@
-Library\Entity\Book:
+Library\Entity\Review:
   type: entity
-  table: book
+  table: review
   id:
     id:
       type: integer
       generator:
         strategy: AUTO
   fields:
-    name:
+    text:
       type: string
       nullable: false
-    author:
-      type: string
-      nullable: false
-    description:
-      type: text
-      nullable: true
   manyToOne:
     user:
       targetEntity: BookUser\Entity\User
-      inversedBy: books
+      inversedBy: reviews
       joinColumn:
         name: user_id
         referencedColumnName: id
-  oneToMany:
-    reviews:
-      targetEntity: Library\Entity\Review
-      mappedBy: book
+    book:
+      targetEntity: Library\Entity\Book
+      inversedBy: reviews
+      joinColumn:
+        name: book_id
+        referencedBolumnName: id
