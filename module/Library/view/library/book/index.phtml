@@ -9,7 +9,10 @@ $this->headTitle($title);
 <?php echo $flash->render('info', array('alert', 'alert-dismissible', 'alert-info')); ?>
 <?php echo $flash->render('default', array('alert', 'alert-dismissible', 'alert-warning')); ?>
 <?php echo $flash->render('success', array('alert', 'alert-dismissible', 'alert-success')); ?>
-
+<a href="<?php echo $this->url('book', array('action' => 'add')); ?>" class="btn btn-block btn-info">
+    <span class="glyphicon glyphicon-plus"></span>
+    Add New Book
+</a>
 <table class="table table-hover">
     <tbody>
     <?php foreach ($this->books as $book): ?>
@@ -20,10 +23,12 @@ $this->headTitle($title);
                 </a>
             </td>
             <td>
-                <a class="btn btn-default" href="<?php echo $this->url('book', array('action' => 'edit', 'id' => $book['id'])); ?>">Edit</a>
+                <a class="btn btn-default"
+                   href="<?php echo $this->url('book', array('action' => 'edit', 'id' => $book['id'])); ?>">Edit</a>
             </td>
             <td>
-                <a class="btn btn-danger" href="<?php echo $this->url('book', array('action' => 'delete', 'id' => $book['id'])); ?>">Delete</a>
+                <a class="btn btn-danger"
+                   href="<?php echo $this->url('book', array('action' => 'delete', 'id' => $book['id'])); ?>">Delete</a>
             </td>
         </tr>
     <?php endforeach; ?>

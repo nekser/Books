@@ -2,6 +2,7 @@
 namespace Library\Form;
 
 use Library\Form\InputFilter\BookInputFilter;
+use Zend\Form\Element\File;
 use Zend\Form\Form;
 
 class BookForm extends Form
@@ -30,6 +31,12 @@ class BookForm extends Form
                 'class' => 'form-control'
             ),
         ));
+
+        $file = new File('image-file');
+        $file->setLabel('Cover Image Upload')
+            ->setAttribute('id', 'image-file');
+        $this->add($file);
+
         $this->add(array(
             'name' => 'author',
             'type' => 'Text',

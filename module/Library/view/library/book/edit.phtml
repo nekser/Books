@@ -7,7 +7,7 @@ $this->headTitle($title);
 <?php
 /** @var Zend\Form\Form $form */
 $form = $this->form;
-$form->setAttribute('action', $this->url('book', array('action' => 'edit', 'id' =>  $this->book->getId())));
+$form->setAttribute('action', $this->url('book', array('action' => 'edit', 'id' => $this->book->getId())));
 $form->prepare();
 ?>
 <?php $flash = $this->flashMessenger(); ?>
@@ -23,6 +23,15 @@ $form->prepare();
     ?>
     <div class="form-group row">
         <?php echo $this->formRow($form->get('name')); ?>
+    </div>
+    <div class="form-group row">
+        <img src=""/>
+    </div>
+    <div class="form-group row">
+        <?php $fileElement = $form->get('image-file'); ?>
+        <?php echo $this->formLabel($fileElement); ?>
+        <?php echo $this->formFile($fileElement); ?>
+        <?php echo $this->formElementErrors($fileElement); ?>
     </div>
     <div class="form-group row">
         <?php echo $this->formRow($form->get('author')); ?>

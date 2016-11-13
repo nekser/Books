@@ -25,6 +25,12 @@ $form->prepare();
         <?php echo $this->formRow($form->get('name')); ?>
     </div>
     <div class="form-group row">
+        <?php $fileElement = $form->get('image-file'); ?>
+        <?php echo $this->formLabel($fileElement); ?>
+        <?php echo $this->formFile($fileElement); ?>
+        <?php echo $this->formElementErrors($fileElement); ?>
+    </div>
+    <div class="form-group row">
         <?php echo $this->formRow($form->get('author')); ?>
     </div>
     <div class="form-group row">
