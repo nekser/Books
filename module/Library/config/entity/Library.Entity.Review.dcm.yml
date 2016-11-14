@@ -10,9 +10,12 @@ Library\Entity\Review:
     text:
       type: string
       nullable: false
+    created_at:
+      type: integer
+      nullable: false
   manyToOne:
     user:
-      targetEntity: BookUser\Entity\User
+      targetEntity:  BookUser\Entity\User
       inversedBy: reviews
       joinColumn:
         name: user_id

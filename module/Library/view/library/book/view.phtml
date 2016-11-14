@@ -1,5 +1,5 @@
-<h1><?php echo $this->book['name']; ?></h1>
-<h2><?php echo $this->book['author']; ?></h2>
+<h1><?php echo $this->book->getName(); ?></h1>
+<h2><?php echo $this->book->getAuthor(); ?></h2>
 <div class="row">
 
     <div class="col-md-8">
@@ -8,7 +8,27 @@
 
     <div class="col-md-4">
         <h3>Book Description</h3>
-        <p><?php echo $this->book['description']; ?></p>
+        <p><?php echo $this->book->getDescription(); ?></p>
     </div>
-
+</div>
+<h2>Reviews</h2>
+<div class="row">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Date</th>
+            <th>User</th>
+            <th>Review</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach($this->book->getReviews() as $review): ?>
+        <tr>
+            <td scope="row"><?php echo date("F j, Y, g:i a", $review->getCreatedAt()); ?></td>
+            <td><?php echo $review->getUser()->getUsername(); ?></td>
+            <td><?php echo $review->getText(); ?></td>
+        </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
 </div>

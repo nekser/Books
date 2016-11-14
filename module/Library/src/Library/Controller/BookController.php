@@ -84,8 +84,7 @@ class BookController extends AbstractActionController
             ->setMaxResults(1)
             ->getQuery();
 
-        $book = $query->getSingleResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-
+        $book = $query->getSingleResult(/*\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY*/);
         return new ViewModel(
             array(
                 'book' => $book
