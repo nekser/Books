@@ -23,6 +23,7 @@ Library\Entity\Book:
       joinColumn:
         name: user_id
         referencedColumnName: id
+        onDelete: CASCADE
   oneToMany:
     reviews:
       targetEntity: Library\Entity\Review

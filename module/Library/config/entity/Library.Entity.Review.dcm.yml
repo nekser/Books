@@ -20,9 +20,11 @@ Library\Entity\Review:
       joinColumn:
         name: user_id
         referencedColumnName: id
+        onDelete: CASCADE
     book:
       targetEntity: Library\Entity\Book
       inversedBy: reviews
       joinColumn:
         name: book_id
         referencedBolumnName: id
+        onDelete: CASCADE

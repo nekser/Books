@@ -22,6 +22,10 @@ class BookForm extends Form
             'type' => 'hidden',
         ));
         $this->add(array(
+            'name' => 'user',
+            'type' => 'hidden',
+        ));
+        $this->add(array(
             'name' => 'name',
             'type' => 'Text',
             'options' => array(

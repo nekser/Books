@@ -10,21 +10,15 @@ class BookController extends AbstractActionController
 {
     public function indexAction()
     {
-        /** @var \Doctrine\ORM\EntityManager $em */
-        $em = $this->getServiceLocator()
-            ->get('doctrine.entitymanager.orm_default');
-        $auth = $this->getServiceLocator()
+        $sm = $this->getServiceLocator();
+
+        $auth = $sm
             ->get('zfcuser_auth_service');
 
-        $qb = $em->createQueryBuilder();
+        /** @var \Library\Service\BookService $bookService */
+        $bookService = $sm->get('BookService');
 
-        $query = $qb->select('b')
-            ->from('\Library\Entity\Book', 'b')
-            ->where($qb->expr()->eq('IDENTITY(b.user)', ':userId'))
-            ->setParameter('userId', $auth->getIdentity()->getId())
-            ->getQuery();
-
-        $books = $query->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $books = $bookService->fetchAll($auth->getIdentity()->getId());
 
         return new ViewModel(array(
             'books' => $books
@@ -33,33 +27,34 @@ class BookController extends AbstractActionController
 
     public function addAction()
     {
+        $sm = $this->getServiceLocator();
+
+        $auth = $sm
+            ->get('zfcuser_auth_service');
+
+        /** @var \Library\Service\BookService $bookService */
+        $bookService = $sm->get('BookService');
+
         $form = new BookForm();
         $form->get('submit')->setValue('Add');
-
 
         /**  @var \Zend\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $form->setData($request->getPost());
             if ($form->isValid()) {
-                /** @var \Doctrine\ORM\EntityManager $em */
-                $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-                $auth = $this->getServiceLocator()
-                    ->get('zfcuser_auth_service');
-
-                $book = new \Library\Entity\Book();
-                $book->exchangeArray($form->getData());
-                $book->setUser(
-                    $auth->getIdentity()
-                );
-
-                $em->persist($book);
-                $em->flush();
+                try {
+                    $bookService->createBook($form->getData());
+                } catch (\Exception $e) {
+                    $message = 'Error while saving new book';
+                    $this->flashMessenger()->addErrorMessage($message . "Info: " . $e->getMessage());
+                    return array('form' => $form);
+                }
                 $message = 'Book succesfully created!';
                 $this->flashMessenger()->addSuccessMessage($message);
                 return $this->redirect()->toRoute('book');
             } else {
-                $message = 'Error while saving book';
+                $message = 'Input is not valid';
                 $this->flashMessenger()->addErrorMessage($message);
             }
         }
@@ -69,23 +64,20 @@ class BookController extends AbstractActionController
 
     public function viewAction()
     {
+        /** @var \Library\Service\BookService $bookService */
+        $bookService = $this->getServiceLocator()
+            ->get('BookService');
+
         $id = (int)$this->params()->fromRoute('id', 0);
         if (!$id) {
             return $this->notFoundAction();
         }
-        /** @var \Doctrine\ORM\EntityManager $em */
-        $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
 
-        $qb = $em->createQueryBuilder();
-
-        $query = $qb->select('b')
-            ->from('\Library\Entity\Book', 'b')
-            ->where($qb->expr()->eq('b.id', ':id'))
-            ->setParameter('id', $id)
-            ->setMaxResults(1)
-            ->getQuery();
-
-        $book = $query->getSingleResult(/*\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY*/);
+        /** @var \Library\Entity\Book $book */
+        $book = $bookService->fetch($id);
+        if (!$book) {
+            return $this->notFoundAction();
+        }
 
         $reviewForm = new ReviewForm();
         $reviewForm->setData(
@@ -177,26 +169,18 @@ class BookController extends AbstractActionController
 
     public function deleteAction()
     {
+        /** @var \Library\Service\BookService $bookService */
+        $bookService = $this->getServiceLocator()
+            ->get('BookService');
+
         $id = (int)$this->params()->fromRoute('id', 0);
         if (!$id) {
             return $this->notFoundAction();
         }
-        /** @var \Doctrine\ORM\EntityManager $em */
-        $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        $auth = $this->getServiceLocator()
-            ->get('zfcuser_auth_service');
-
         try {
-            /** @var \Library\Entity\Book $book */
-            $book = $em->find('Library\Entity\Book', $id);
-            if ($book->getUser()->getId() != $auth->getIdentity()->getId()) {
-                //FIXME add Forbidden
-                return $this->notFoundAction();
-            }
-            $em->remove($book);
-            $em->flush();
+            $bookService->deleteBook($id);
         } catch (\Exception $e) {
-            $this->flashMessenger()->addErrorMessage('Error while deleting book');
+            $this->flashMessenger()->addErrorMessage('Error. Info: ' . $e->getMessage());
             return $this->redirect()->toRoute('book');
         }
         $this->flashMessenger()->addSuccessMessage('Book was successfully deleted');
