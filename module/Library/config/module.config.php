@@ -3,6 +3,7 @@ return array(
     'controllers' => array(
         'factories' => array(
             'BookController' => 'Library\Controller\Factory\BookControllerFactory',
+            'ReviewController' => 'Library\Controller\Factory\ReviewControllerFactory',
         ),
     ),
 
@@ -19,6 +20,20 @@ return array(
                     'defaults' => array(
                         'controller' => 'BookController',
                         'action' => 'index',
+                    ),
+                ),
+            ),
+            'review' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => '/review[/][:action][/:id]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id' => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'ReviewController',
+                        'action' => 'add',
                     ),
                 ),
             ),

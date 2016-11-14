@@ -37,7 +37,11 @@ return array(
                     'action' => array('view'),
                     'roles' => array('guest')
                 ),
-
+                array(
+                    'controller' => 'ReviewController',
+                    'action' => array('add'),
+                    'roles' => array('user')
+                ),
                 array('controller' => 'Application\Controller\Index', 'roles' => array()),
             ),
         ),
