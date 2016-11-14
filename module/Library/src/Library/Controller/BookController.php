@@ -88,6 +88,9 @@ class BookController extends AbstractActionController
         $book = $query->getSingleResult(/*\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY*/);
 
         $reviewForm = new ReviewForm();
+        $reviewForm->setData(
+            array('book' => $book->getId())
+        );
         $reviewForm->get('submit')->setValue('Add');
         return new ViewModel(
             array(

@@ -15,6 +15,10 @@ class ReviewForm extends Form
             'type' => 'hidden',
         ));
         $this->add(array(
+            'name' => 'book',
+            'type' => 'hidden',
+        ));
+        $this->add(array(
             'name' => 'text',
             'type' => 'Textarea',
             'options' => array(

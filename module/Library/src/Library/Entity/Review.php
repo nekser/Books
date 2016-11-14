@@ -87,4 +87,24 @@ class Review
         $this->created_at = $created_at;
     }
 
+    /**
+     * @param object $data
+     * Helper function.
+     */
+    public function exchangeArray($data)
+    {
+        foreach ($data as $key => $val) {
+            if (property_exists($this, $key)) {
+                $this->$key = ($val !== null) ? $val : null;
+            }
+        }
+    }
+
+    /**
+     * Helper function
+     */
+    public function getArrayCopy()
+    {
+        return get_object_vars($this);
+    }
 }
