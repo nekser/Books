@@ -22,13 +22,30 @@
         </tr>
         </thead>
         <tbody>
-        <?php foreach($this->book->getReviews() as $review): ?>
-        <tr>
-            <td scope="row"><?php echo date("F j, Y, g:i a", $review->getCreatedAt()); ?></td>
-            <td><?php echo $review->getUser()->getUsername(); ?></td>
-            <td><?php echo $review->getText(); ?></td>
-        </tr>
+        <?php foreach ($this->book->getReviews() as $review): ?>
+            <tr>
+                <td scope="row"><?php echo date("F j, Y, g:i a", $review->getCreatedAt()); ?></td>
+                <td><?php echo $review->getUser()->getUsername(); ?></td>
+                <td><?php echo $review->getText(); ?></td>
+            </tr>
         <?php endforeach; ?>
         </tbody>
     </table>
+    <?php
+    /** @var \Zend\Form\Form $form */
+    $form = $this->reviewForm;
+    $form->setAttribute('action', $this->url('book', array('action' => 'add')));
+    $form->prepare();
+    ?>
+    <?php
+    echo $this->form()->openTag($form);
+    echo $this->formHidden($form->get('id'));
+    ?>
+    <div class="form-group row">
+        <?php echo $this->formRow($form->get('text')); ?>
+    </div>
+    <div class="form-group row">
+        <?php echo $this->formSubmit($form->get('submit')); ?>
+    </div>
+    <?php echo $this->form()->closeTag(); ?>
 </div>

@@ -2,6 +2,7 @@
 namespace Library\Controller;
 
 use Library\Form\BookForm;
+use Library\Form\ReviewForm;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
@@ -85,9 +86,13 @@ class BookController extends AbstractActionController
             ->getQuery();
 
         $book = $query->getSingleResult(/*\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY*/);
+
+        $reviewForm = new ReviewForm();
+        $reviewForm->get('submit')->setValue('Add');
         return new ViewModel(
             array(
-                'book' => $book
+                'book' => $book,
+                'reviewForm' => $reviewForm
             )
         );
     }
