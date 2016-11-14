@@ -65,4 +65,14 @@ return array(
             )
         )
     ),
+    'service_manager' => array(
+        'factories' => array(
+            'BookService' => 'Library\Service\Factory\BookServiceFactory',
+            'FileService' => 'Library\Service\Factory\FileServiceFactory',
+            'ReviewService' => 'Library\Service\Factory\ReviewServiceFactory',
+        ),
+        'aliases' => array(
+            'doctrine.entitymanager.orm_default' => 'em',
+        )
+    ),
 );
