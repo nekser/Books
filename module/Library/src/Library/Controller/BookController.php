@@ -94,6 +94,10 @@ class BookController extends AbstractActionController
 
     public function editAction()
     {
+        /** @var \Library\Service\BookService $bookService */
+        $bookService = $this->getServiceLocator()
+            ->get('BookService');
+
         $id = (int)$this->params()->fromRoute('id', 0);
         if (!$id) {
             return $this->notFoundAction();
@@ -106,61 +110,28 @@ class BookController extends AbstractActionController
         /** @var \Zend\Http\Request $request */
         $request = $this->getRequest();
         if (!$request->isPost()) {
-            /** @var \Doctrine\ORM\EntityManager $em */
-            $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-
-            $qb = $em->createQueryBuilder();
-
-            $query = $qb->select('b')
-                ->from('\Library\Entity\Book', 'b')
-                ->where($qb->expr()->eq('IDENTITY(b.user)', ':userId'))
-                ->andWhere($qb->expr()->eq('b.id', ':id'))
-                ->setParameter('userId', $auth->getIdentity()->getId())
-                ->setParameter('id', $id)
-                ->setMaxResults(1)
-                ->getQuery();
-
-            $book = $query->getSingleResult(/*\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY*/);
+            $book = $bookService->fetch($id, true);
             if (!$book) {
                 return $this->notFoundAction();
             }
 
-            // Fill form data.
             $form->bind($book);
             return array('form' => $form, 'id' => $id, 'book' => $book);
         } else {
             $form->setData($request->getPost());
             if ($form->isValid()) {
-                /** @var \Doctrine\ORM\EntityManager $em */
-                $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-                $data = $form->getData();
-                $id = $data['id'];
                 try {
-                    $qb = $em->createQueryBuilder();
-
-                    $query = $qb->select('b')
-                        ->from('\Library\Entity\Book', 'b')
-                        ->where($qb->expr()->eq('IDENTITY(b.user)', ':userId'))
-                        ->andWhere($qb->expr()->eq('b.id', ':id'))
-                        ->setParameter('userId', $auth->getIdentity()->getId())
-                        ->setParameter('id', $id)
-                        ->setMaxResults(1)
-                        ->getQuery();
-
-                    $book = $query->getSingleResult();
-                } catch (\Exception $ex) {
-                    return $this->redirect()->toRoute('book', array(
-                        'action' => 'index'
-                    ));
+                    $bookService->updateBook($form->getData());
+                } catch (\Exception $e) {
+                    $message = 'Error while saving book' . $e->getMessage();
+                    $this->flashMessenger()->addErrorMessage($message);
+                    return array('form' => $form, 'id' => $id);
                 }
-                $book->exchangeArray($form->getData());
-                $em->persist($book);
-                $em->flush();
                 $message = 'Book succesfully saved!';
                 $this->flashMessenger()->addSuccessMessage($message);
                 return $this->redirect()->toRoute('book');
             } else {
-                $message = 'Error while saving book';
+                $message = "Invalid input";
                 $this->flashMessenger()->addErrorMessage($message);
                 return array('form' => $form, 'id' => $id);
             }

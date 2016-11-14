@@ -38,24 +38,31 @@ class BookService implements ServiceLocatorAwareInterface
 
     /**
      * @param $id
+     * @param $checkIdentity
      * @return null | \Library\Entity\Book
      */
-    public function fetch($id)
+    public function fetch($id, $checkIdentity = false)
     {
         /** @var \Doctrine\ORM\EntityManager $em */
         $em = $this->getServiceLocator()
             ->get('em');
+        /** @var ZfcUserAuthentication $auth */
+        $auth = $this->getServiceLocator()
+            ->get('zfcuser_auth_service');
 
         $qb = $em->createQueryBuilder();
 
         $query = $qb->select('b')
             ->from('\Library\Entity\Book', 'b')
             ->where($qb->expr()->eq('b.id', ':id'))
-            ->setParameter('id', $id)
-            ->setMaxResults(1)
-            ->getQuery();
+            ->setParameter('id', $id);
+        if ($checkIdentity) {
+            $query->andWhere($qb->expr()->eq('IDENTITY(b.user)', ':userId'))
+                ->setParameter('userId', $auth->getIdentity()->getId());
+        }
+        $query->setMaxResults(1);
 
-        $book = $query->getSingleResult();
+        $book = $query->getQuery()->getSingleResult();
 
         return $book;
     }
@@ -85,9 +92,40 @@ class BookService implements ServiceLocatorAwareInterface
         $em->flush();
     }
 
-    public function updateBook()
+    public function updateBook($data)
     {
+        /** @var \Doctrine\ORM\EntityManager $em */
+        $em = $this->getServiceLocator()
+            ->get('em');
+        /** @var ZfcUserAuthentication $auth */
+        $auth = $this->getServiceLocator()
+            ->get('zfcuser_auth_service');
 
+        $id = $data['id'];
+        try {
+            $qb = $em->createQueryBuilder();
+
+            $query = $qb->select('b')
+                ->from('\Library\Entity\Book', 'b')
+                ->where($qb->expr()->eq('IDENTITY(b.user)', ':userId'))
+                ->andWhere($qb->expr()->eq('b.id', ':id'))
+                ->setParameter('userId', $auth->getIdentity()->getId())
+                ->setParameter('id', $id)
+                ->setMaxResults(1)
+                ->getQuery();
+            /** @var \Library\Entity\Book $book */
+            $book = $query->getSingleResult();
+        } catch (\Exception $e) {
+            throw new \Exception("No such book or not enough permissions.", 0, $e);
+        }
+        $book->exchangeArray($data);
+        $book->setUser($auth->getIdentity());
+        try {
+            $em->persist($book);
+            $em->flush();
+        } catch (\Exception $e) {
+            throw new \Exception("Error while book saving.", 0, $e);
+        }
     }
 
     /**
