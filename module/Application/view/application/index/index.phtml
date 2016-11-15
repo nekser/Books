@@ -1,5 +1,10 @@
-<ul>
+<div class="row">
     <?php foreach ($this->books as $book): ?>
-        <li><?php echo $book['name']; ?></li>
+        <div class="col-xs-6 col-md-2">
+            <a href="<?php echo $this->url('book', array('action' => 'view', 'id' => $book['id'])); ?>">
+                <img class="img-responsive" src="<?php echo $this->basePath($book['cover']); ?>"
+                     alt="<?php echo $book['name']; ?>"/>
+            </a>
+        </div>
     <?php endforeach; ?>
-</ul>
+</div>

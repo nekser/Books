@@ -34,17 +34,32 @@ class BookController extends AbstractActionController
 
         /** @var \Library\Service\BookService $bookService */
         $bookService = $sm->get('BookService');
-
+        /** @var \Library\Service\FileService $fileService */
+        $fileService = $sm->get('FileService');
         $form = new BookForm();
         $form->get('submit')->setValue('Add');
 
         /**  @var \Zend\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $form->setData($request->getPost());
+            $form->setData(array_merge_recursive(
+                $request->getPost()->toArray(),
+                $request->getFiles()->toArray()
+            ));
             if ($form->isValid()) {
+                $files = $request->getFiles()->toArray();
+                $cover = $files["image-file"];
                 try {
-                    $bookService->createBook($form->getData());
+                    $filePath = $fileService->uploadFile($cover);
+                } catch (\Exception $e) {
+                    $message = 'Error while file uploading';
+                    $this->flashMessenger()->addErrorMessage($message . ". Info: " . $e->getMessage());
+                    return array('form' => $form);
+                }
+                try {
+                    $data = $form->getData();
+                    $data['cover'] = $filePath;
+                    $bookService->createBook($data);
                 } catch (\Exception $e) {
                     $message = 'Error while saving new book';
                     $this->flashMessenger()->addErrorMessage($message . "Info: " . $e->getMessage());

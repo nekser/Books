@@ -14,6 +14,8 @@ class Book
     private $author;
     /** @var  string */
     private $description;
+    /** @var  string */
+    private $cover;
     /** @var  \Doctrine\Common\Collections\ArrayCollection */
     private $gallery;
     /** @var string */
@@ -146,6 +148,22 @@ class Book
     public function setFile($file)
     {
         $this->file = $file;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCover()
+    {
+        return $this->cover;
+    }
+
+    /**
+     * @param string $cover
+     */
+    public function setCover($cover)
+    {
+        $this->cover = $cover;
     }
 
     /**
