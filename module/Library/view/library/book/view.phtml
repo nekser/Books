@@ -3,7 +3,7 @@
 <div class="row">
 
     <div class="col-md-8">
-        <img class="img-responsive" src="http://placehold.it/750x500" alt="">
+        <img class="img-responsive" src="<?php echo $this->basePath($this->book->getCover()); ?>" alt="">
     </div>
 
     <div class="col-md-4">
@@ -36,22 +36,28 @@
         <?php endforeach; ?>
         </tbody>
     </table>
-    <?php
-    /** @var \Zend\Form\Form $form */
-    $form = $this->reviewForm;
-    $form->setAttribute('action', $this->url('review', array('action' => 'add')));
-    $form->prepare();
-    ?>
-    <?php
-    echo $this->form()->openTag($form);
-    echo $this->formHidden($form->get('id'));
-    echo $this->formHidden($form->get('book'));
-    ?>
-    <div class="form-group row">
-        <?php echo $this->formRow($form->get('text')); ?>
-    </div>
-    <div class="form-group row">
-        <?php echo $this->formSubmit($form->get('submit')); ?>
-    </div>
-    <?php echo $this->form()->closeTag(); ?>
+    <?php if ($this->zfcUserIdentity()): ?>
+        <?php
+        /** @var \Zend\Form\Form $form */
+        $form = $this->reviewForm;
+        $form->setAttribute('action', $this->url('review', array('action' => 'add')));
+        $form->prepare();
+        ?>
+        <?php
+        echo $this->form()->openTag($form);
+        echo $this->formHidden($form->get('id'));
+        echo $this->formHidden($form->get('book'));
+        ?>
+        <div class="form-group row">
+            <?php echo $this->formRow($form->get('text')); ?>
+        </div>
+        <div class="form-group row">
+            <?php echo $this->formSubmit($form->get('submit')); ?>
+        </div>
+        <?php echo $this->form()->closeTag(); ?>
+    <?php else: ?>
+        <div class="row">
+            <p>Reviews are allowed for registered users only</p>
+        </div>
+    <?php endif; ?>
 </div>
