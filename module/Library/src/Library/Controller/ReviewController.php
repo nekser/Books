@@ -26,8 +26,7 @@ class ReviewController extends AbstractActionController
                     $this->flashMessenger()->addErrorMessage($message);
                 }
             } else {
-                $message = 'Input is not valid';
-                $this->flashMessenger()->addErrorMessage($message);
+                $this->flashMessenger()->addErrorMessage($form->getMessages());
             }
             return $this->redirect()
                 ->toRoute(

@@ -1,6 +1,7 @@
 <?php
 namespace Library\Form;
 
+use Library\Form\InputFilter\ReviewInputFilter;
 use Zend\Form\Form;
 
 class ReviewForm extends Form
@@ -8,7 +9,12 @@ class ReviewForm extends Form
     public function __construct($name = null)
     {
         parent::__construct('review');
+        $this->addElements();
+        $this->setInputFilter(new ReviewInputFilter());
+    }
 
+    protected function addElements()
+    {
         $this->setAttribute('method', 'post');
         $this->add(array(
             'name' => 'id',
