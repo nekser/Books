@@ -9,13 +9,13 @@ class ReviewForm extends Form
     public function __construct($name = null)
     {
         parent::__construct('review');
+        $this->setAttribute('method', 'post');
         $this->addElements();
         $this->setInputFilter(new ReviewInputFilter());
     }
 
     protected function addElements()
     {
-        $this->setAttribute('method', 'post');
         $this->add(array(
             'name' => 'id',
             'type' => 'hidden',

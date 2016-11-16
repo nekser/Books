@@ -50,27 +50,19 @@ class BookController extends AbstractActionController
                 $files = $request->getFiles()->toArray();
                 $cover = $files["image-file"];
                 try {
-                    $filePath = $fileService->uploadFile($cover);
-                } catch (\Exception $e) {
-                    $message = 'Error while file uploading';
-                    $this->flashMessenger()->addErrorMessage($message . ". Info: " . $e->getMessage());
-                    return array('form' => $form);
-                }
-                try {
                     $data = $form->getData();
-                    $data['cover'] = $filePath;
+                    $data['cover'] = $cover['name'];
                     $bookService->createBook($data);
                 } catch (\Exception $e) {
                     $message = 'Error while saving new book';
-                    $this->flashMessenger()->addErrorMessage($message . "Info: " . $e->getMessage());
+                    $this->flashMessenger()->addErrorMessage($message . " Info: " . $e->getMessage());
                     return array('form' => $form);
                 }
                 $message = 'Book succesfully created!';
                 $this->flashMessenger()->addSuccessMessage($message);
                 return $this->redirect()->toRoute('book');
             } else {
-                $message = 'Input is not valid';
-                $this->flashMessenger()->addErrorMessage($message);
+                $this->flashMessenger()->addErrorMessage($form->getMessages());
             }
         }
 
@@ -135,8 +127,12 @@ class BookController extends AbstractActionController
         } else {
             $form->setData($request->getPost());
             if ($form->isValid()) {
+                $files = $request->getFiles()->toArray();
+                $cover = $files["image-file"];
                 try {
-                    $bookService->updateBook($form->getData());
+                    $data = $form->getData();
+                    $data['cover'] = $cover['name'];
+                    $bookService->updateBook($data);
                 } catch (\Exception $e) {
                     $message = 'Error while saving book' . $e->getMessage();
                     $this->flashMessenger()->addErrorMessage($message);
@@ -146,8 +142,7 @@ class BookController extends AbstractActionController
                 $this->flashMessenger()->addSuccessMessage($message);
                 return $this->redirect()->toRoute('book');
             } else {
-                $message = "Invalid input";
-                $this->flashMessenger()->addErrorMessage($message);
+                $this->flashMessenger()->addErrorMessage($form->getMessages());
                 return array('form' => $form, 'id' => $id);
             }
         }

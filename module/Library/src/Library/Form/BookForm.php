@@ -10,13 +10,17 @@ class BookForm extends Form
     public function __construct($name = null)
     {
         parent::__construct('book');
-
         $this->setAttribute('method', 'post');
         $this->setAttribute(
             'enctype',
             'multipart/form-data'
         );
+        $this->addElements();
         $this->setInputFilter(new BookInputFilter());
+    }
+
+    protected function addElements()
+    {
         $this->add(array(
             'name' => 'id',
             'type' => 'hidden',
