@@ -46,7 +46,7 @@ class BookInputFilter extends InputFilter
                 array(
                     'name' => 'filerenameupload',
                     'options' => array(
-                        'target' => './data/upload/covers/cover',
+                        'target' => 'public/upload/covers/cover',
                         'randomize' => true,
                         'use_upload_extension' => true
                     )

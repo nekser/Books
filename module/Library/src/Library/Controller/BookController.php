@@ -34,8 +34,6 @@ class BookController extends AbstractActionController
 
         /** @var \Library\Service\BookService $bookService */
         $bookService = $sm->get('BookService');
-        /** @var \Library\Service\FileService $fileService */
-        $fileService = $sm->get('FileService');
         $form = new BookForm();
         $form->get('submit')->setValue('Add');
 
@@ -51,7 +49,7 @@ class BookController extends AbstractActionController
                 $cover = $files["image-file"];
                 try {
                     $data = $form->getData();
-                    $data['cover'] = $cover['name'];
+                    $data['cover'] = str_replace("public/", "", $data['image-file']['tmp_name']);
                     $bookService->createBook($data);
                 } catch (\Exception $e) {
                     $message = 'Error while saving new book';
