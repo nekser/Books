@@ -18,17 +18,17 @@ $this->headTitle($title);
     <?php foreach ($this->books as $book): ?>
         <tr>
             <td>
-                <a href="<?php echo $this->url('book', array('action' => 'view', 'id' => $book['id'])); ?>">
-                    <?php echo $book['name']; ?>
+                <a href="<?php echo $this->url('book', array('action' => 'view', 'id' => $book->getId())); ?>">
+                    <?php echo $book->getName(); ?>
                 </a>
             </td>
             <td>
                 <a class="btn btn-default"
-                   href="<?php echo $this->url('book', array('action' => 'edit', 'id' => $book['id'])); ?>">Edit</a>
+                   href="<?php echo $this->url('book', array('action' => 'edit', 'id' => $book->getId())); ?>">Edit</a>
             </td>
             <td>
                 <a class="btn btn-danger"
-                   href="<?php echo $this->url('book', array('action' => 'delete', 'id' => $book['id'])); ?>">Delete</a>
+                   href="<?php echo $this->url('book', array('action' => 'delete', 'id' => $book->getId())); ?>">Delete</a>
             </td>
         </tr>
     <?php endforeach; ?>

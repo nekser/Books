@@ -31,7 +31,7 @@ class BookService implements ServiceLocatorAwareInterface
         }
 
         $books = $query->getQuery()
-            ->getResult(AbstractQuery::HYDRATE_ARRAY);
+            ->getResult();
 
         return $books;
     }
@@ -117,6 +117,9 @@ class BookService implements ServiceLocatorAwareInterface
             $book = $query->getSingleResult();
         } catch (\Exception $e) {
             throw new \Exception("No such book or not enough permissions.", 0, $e);
+        }
+        if (!isset($data['cover'])) {
+            $data['cover'] = $book->getCover();
         }
         $book->exchangeArray($data);
         $book->setUser($auth->getIdentity());

@@ -6,6 +6,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class Book
 {
+    const DEFAULT_COVER = 'upload/covers/no-photo.png';
+
     /** @var  int */
     private $id;
     /** @var  string */
@@ -155,7 +157,13 @@ class Book
      */
     public function getCover()
     {
-        return $this->cover;
+        if (file_exists('public/' . $this->cover)
+            && !is_dir('public/' . $this->cover)
+        ) {
+            return $this->cover;
+        } else {
+            return self::DEFAULT_COVER;
+        }
     }
 
     /**
@@ -178,6 +186,7 @@ class Book
             }
         }
     }
+
     /**
      * Helper function
      */
