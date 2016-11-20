@@ -181,8 +181,10 @@ class Book
     public function exchangeArray($data)
     {
         foreach ($data as $key => $val) {
-            if (property_exists($this, $key)) {
-                $this->$key = ($val !== null) ? $val : null;
+            if (property_exists($this, $key) &&
+                !is_null($val)
+            ) {
+                $this->$key = $val;
             }
         }
     }

@@ -129,7 +129,10 @@ class BookController extends AbstractActionController
                 $cover = $files["image-file"];
                 try {
                     $data = $form->getData();
-                    $data['cover'] = $cover['name'];
+                    //FIXME:
+                    if ($cover["name"] !== "") {
+                        $data['cover'] = $cover['name'];
+                    }
                     $bookService->updateBook($data);
                 } catch (\Exception $e) {
                     $message = 'Error while saving book' . $e->getMessage();
