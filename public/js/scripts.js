@@ -1,6 +1,10 @@
 $(function(){
-    $('[data-toggle=confirmation]').confirmation({
-        rootSelector: '[data-toggle=confirmation]',
-        // other options
+    $('.fancybox').fancybox({
+        helpers : {
+            media: true
+        },
+        width: "100%",
+        height: 870,
+        autoSize: false,
     });
 });

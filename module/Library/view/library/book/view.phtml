@@ -1,71 +1,76 @@
 <h1><?php echo $this->book->getName(); ?></h1>
 <h2><?php echo $this->book->getAuthor(); ?></h2>
-<div class="row">
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <img class="img-responsive" src="<?php echo $this->basePath($this->book->getCover()); ?>" alt="">
+        </div>
 
-    <div class="col-md-8">
-        <img class="img-responsive" src="<?php echo $this->basePath($this->book->getCover()); ?>" alt="">
+        <div class="col-md-4">
+            <h3>Book Description</h3>
+            <p><?php echo $this->book->getDescription(); ?></p>
+        </div>
+        <a class="btn btn-primary fancybox" href="#booktext">Read Book</a>
     </div>
-
-    <div class="col-md-4">
-        <h3>Book Description</h3>
-        <p><?php echo $this->book->getDescription(); ?></p>
-    </div>
-</div>
-<h2>Reviews</h2>
-<?php $flash = $this->flashMessenger(); ?>
-<?php echo $flash->render('error', array('alert', 'alert-dismissible', 'alert-danger')); ?>
-<?php echo $flash->render('info', array('alert', 'alert-dismissible', 'alert-info')); ?>
-<?php echo $flash->render('default', array('alert', 'alert-dismissible', 'alert-warning')); ?>
-<?php echo $flash->render('success', array('alert', 'alert-dismissible', 'alert-success')); ?>
-<div class="row">
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Date</th>
-            <th>User</th>
-            <th>Review</th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php foreach ($this->book->getReviews() as $review): ?>
+    <h2>Reviews</h2>
+    <?php $flash = $this->flashMessenger(); ?>
+    <?php echo $flash->render('error', array('alert', 'alert-dismissible', 'alert-danger')); ?>
+    <?php echo $flash->render('info', array('alert', 'alert-dismissible', 'alert-info')); ?>
+    <?php echo $flash->render('default', array('alert', 'alert-dismissible', 'alert-warning')); ?>
+    <?php echo $flash->render('success', array('alert', 'alert-dismissible', 'alert-success')); ?>
+    <div class="row">
+        <table class="table table-striped">
+            <thead>
             <tr>
-                <td scope="row"><?php echo date("F j, Y, g:i a", $review->getCreatedAt()); ?></td>
-                <td><?php echo $review->getUser()->getUsername(); ?></td>
-                <td><?php echo $review->getText(); ?></td>
+                <th>Date</th>
+                <th>User</th>
+                <th>Review</th>
             </tr>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
-    <?php if ($this->zfcUserIdentity()): ?>
-        <?php
-        /** @var \Zend\Form\Form $form */
-        $form = $this->reviewForm;
-        $form->setAttribute('action', $this->url('review', array('action' => 'add')));
-        $form->prepare();
-        ?>
-        <?php
-        echo $this->form()->openTag($form);
-        echo $this->formHidden($form->get('id'));
-        echo $this->formHidden($form->get('book'));
-        ?>
-        <div class="form-group row">
-            <?php echo $this->formRow($form->get('text')); ?>
+            </thead>
+            <tbody>
+            <?php foreach ($this->book->getReviews() as $review): ?>
+                <tr>
+                    <td scope="row"><?php echo date("F j, Y, g:i a", $review->getCreatedAt()); ?></td>
+                    <td><?php echo $review->getUser()->getUsername(); ?></td>
+                    <td><?php echo $review->getText(); ?></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <?php if ($this->zfcUserIdentity()): ?>
+            <?php
+            /** @var \Zend\Form\Form $form */
+            $form = $this->reviewForm;
+            $form->setAttribute('action', $this->url('review', array('action' => 'add')));
+            $form->prepare();
+            ?>
+            <?php
+            echo $this->form()->openTag($form);
+            echo $this->formHidden($form->get('id'));
+            echo $this->formHidden($form->get('book'));
+            ?>
+            <div class="form-group row">
+                <?php echo $this->formRow($form->get('text')); ?>
+            </div>
+            <div class="form-group row">
+                <?php echo $this->formSubmit($form->get('submit')); ?>
+            </div>
+            <?php echo $this->form()->closeTag(); ?>
+        <?php else: ?>
+            <div class="row">
+                <p>Reviews are allowed for registered users only</p>
+            </div>
+        <?php endif; ?>
+    </div>
+    <div id="booktext" style="display:none;">
+        <div>
+            <div id="prev" class="arrow" onclick="Book.prevPage();">‹</div>
+            <div id="area"></div>
+            <div id="next" class="arrow" onclick="Book.nextPage();">›</div>
+            <script>
+                var Book = ePub("/<?php echo $this->book->getFile(); ?>");
+                Book.renderTo("area");
+            </script>
         </div>
-        <div class="form-group row">
-            <?php echo $this->formSubmit($form->get('submit')); ?>
-        </div>
-        <?php echo $this->form()->closeTag(); ?>
-    <?php else: ?>
-        <div class="row">
-            <p>Reviews are allowed for registered users only</p>
-        </div>
-    <?php endif; ?>
+    </div>
 </div>
-
-<div onclick="Book.prevPage();">‹</div>
-<div id="area"></div>
-<div onclick="Book.nextPage();">›</div>
-<script>
-    var Book = ePub("/upload/books/example.epub");
-    Book.renderTo("area");
-</script>

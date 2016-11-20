@@ -147,6 +147,8 @@ class BookService implements ServiceLocatorAwareInterface
         try {
             /** @var \Library\Entity\Book $book */
             $book = $em->find('Library\Entity\Book', $id);
+            //TODO: Remove files
+
             if ($book->getUser()->getId() != $auth->getIdentity()->getId()) {
                 throw new \Exception('You have not permissions to delete this book');
             }

@@ -53,7 +53,7 @@ class BookInputFilter extends InputFilter
                 )
             )
         ));
-
+        //book
         $this->add(array(
             'name' => 'book-file',
             'required' => false,
@@ -61,7 +61,7 @@ class BookInputFilter extends InputFilter
                 array(
                     'name' => 'filesize',
                     'options' => array(
-                        'max' => 204800
+                        'max' => 2048000
                     )
                 ),
                 array(
@@ -117,7 +117,7 @@ class BookInputFilter extends InputFilter
                     'name' => 'string_length',
                     'options' => array(
                         'min' => 5,
-                        'max' => 300
+                        'max' => 30000
                     ),
                 ),
             ),
