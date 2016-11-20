@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<phpunit bootstrap="Bootstrap.php" colors="true">
+<phpunit bootstrap="ApplicationTest/Bootstrap.php"
+         convertErrorsToExceptions="false"
+         convertNoticesToExceptions="false"
+         convertWarningsToExceptions="false"
+         processIsolation="true"
+         colors="true">>
     <testsuites>
-        <testsuite name="zf2tutorial">
+        <testsuite name="ApplicationTest">
             <directory>./ApplicationTest</directory>
         </testsuite>
     </testsuites>
+    <php>
+        <ini name="display_errors" value="On"/>
+        <ini name="display_startup_errors" value="On"/>
+    </php>
 </phpunit>

@@ -2,10 +2,10 @@
 
 namespace ApplicationTest;
 
+use RuntimeException;
 use Zend\Loader\AutoloaderFactory;
 use Zend\Mvc\Service\ServiceManagerConfig;
 use Zend\ServiceManager\ServiceManager;
-use RuntimeException;
 
 error_reporting(E_ALL | E_STRICT);
 chdir(__DIR__);
@@ -35,7 +35,17 @@ class Bootstrap
                 'module_paths' => $zf2ModulePaths,
             ),
             'modules' => array(
-                'Application'
+                'ZfcBase',
+                'ZfcUser',
+                'ZfcUserDoctrineORM',
+                'BjyAuthorize',
+                //        'ZendDeveloperTools',
+                'DoctrineModule',
+                'DoctrineORMModule',
+                'Library',
+                'BookUser',
+                'Application',
+
             )
         );
 
@@ -60,11 +70,11 @@ class Bootstrap
     {
         $vendorPath = static::findParentPath('vendor');
 
-        if (file_exists($vendorPath.'/autoload.php')) {
-            include $vendorPath.'/autoload.php';
+        if (file_exists($vendorPath . '/autoload.php')) {
+            include $vendorPath . '/autoload.php';
         }
 
-        if (! class_exists('Zend\Loader\AutoloaderFactory')) {
+        if (!class_exists('Zend\Loader\AutoloaderFactory')) {
             throw new RuntimeException(
                 'Unable to load ZF2. Run `php composer.phar install`'
             );
