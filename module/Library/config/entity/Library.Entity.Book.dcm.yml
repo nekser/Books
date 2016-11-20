@@ -19,6 +19,9 @@ Library\Entity\Book:
     cover:
       type: string
       nullable: true
+    file:
+      type: string
+      nullable: true
   manyToOne:
     user:
       targetEntity: BookUser\Entity\User

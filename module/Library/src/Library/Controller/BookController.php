@@ -50,6 +50,7 @@ class BookController extends AbstractActionController
                 try {
                     $data = $form->getData();
                     $data['cover'] = str_replace("public/", "", $data['image-file']['tmp_name']);
+                    $data['file'] = str_replace("public/", "", $data['book-file']['tmp_name']);
                     $bookService->createBook($data);
                 } catch (\Exception $e) {
                     $message = 'Error while saving new book';
@@ -127,11 +128,16 @@ class BookController extends AbstractActionController
             if ($form->isValid()) {
                 $files = $request->getFiles()->toArray();
                 $cover = $files["image-file"];
+                $bookFile = $files["book-file"];
                 try {
                     $data = $form->getData();
                     //FIXME:
                     if ($cover["name"] !== "") {
-                        $data['cover'] = $cover['name'];
+                        $data['cover'] = str_replace("public/", "", $data['image-file']['tmp_name']);
+                    }
+                    //FIXME:
+                    if ($bookFile["name"] !== "") {
+                        $data['file'] = str_replace("public/", "", $data['book-file']['tmp_name']);
                     }
                     $bookService->updateBook($data);
                 } catch (\Exception $e) {

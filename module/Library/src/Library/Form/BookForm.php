@@ -40,10 +40,15 @@ class BookForm extends Form
             ),
         ));
 
-        $file = new File('image-file');
-        $file->setLabel('Cover Image Upload')
+        $coverFile = new File('image-file');
+        $coverFile->setLabel('Cover Image Upload')
             ->setAttribute('id', 'image-file');
-        $this->add($file);
+        $this->add($coverFile);
+
+        $bookFile = new File('book-file');
+        $bookFile->setLabel('Book File Upload')
+            ->setAttribute('id', 'book-file');
+        $this->add($bookFile);
 
         $this->add(array(
             'name' => 'author',

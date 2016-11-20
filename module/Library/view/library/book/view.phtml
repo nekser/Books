@@ -61,3 +61,11 @@
         </div>
     <?php endif; ?>
 </div>
+
+<div onclick="Book.prevPage();">‹</div>
+<div id="area"></div>
+<div onclick="Book.nextPage();">›</div>
+<script>
+    var Book = ePub("/upload/books/example.epub");
+    Book.renderTo("area");
+</script>

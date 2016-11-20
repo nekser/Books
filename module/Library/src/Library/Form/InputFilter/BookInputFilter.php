@@ -53,6 +53,37 @@ class BookInputFilter extends InputFilter
                 )
             )
         ));
+
+        $this->add(array(
+            'name' => 'book-file',
+            'required' => false,
+            'validators' => array(
+                array(
+                    'name' => 'filesize',
+                    'options' => array(
+                        'max' => 204800
+                    )
+                ),
+                array(
+                    'name' => 'filemimetype',
+                    'options' => array(
+                        'mimeType' => 'application/epub+zip',
+                        'magicFile' => false
+                    )
+                )
+            ),
+            'filters' => array(
+                array(
+                    'name' => 'filerenameupload',
+                    'options' => array(
+                        'target' => 'public/upload/books/book',
+                        'randomize' => true,
+                        'use_upload_extension' => true
+                    )
+                )
+            )
+        ));
+
         //author
         $this->add(array(
             'name' => 'author',

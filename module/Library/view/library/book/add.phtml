@@ -32,6 +32,12 @@ $form->prepare();
         <?php echo $this->formElementErrors($fileElement); ?>
     </div>
     <div class="form-group row">
+        <?php $bookFileElement = $form->get('book-file'); ?>
+        <?php echo $this->formLabel($bookFileElement); ?>
+        <?php echo $this->formFile($bookFileElement); ?>
+        <?php echo $this->formElementErrors($bookFileElement); ?>
+    </div>
+    <div class="form-group row">
         <?php echo $this->formRow($form->get('author')); ?>
     </div>
     <div class="form-group row">
