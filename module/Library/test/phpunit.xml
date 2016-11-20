@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<phpunit bootstrap="ApplicationTest/Bootstrap.php"
+<phpunit bootstrap="LibraryTest/Bootstrap.php"
          convertErrorsToExceptions="false"
          convertNoticesToExceptions="false"
          convertWarningsToExceptions="false"
          processIsolation="true"
          colors="true">>
     <testsuites>
-        <testsuite name="ApplicationTest">
-            <directory>./ApplicationTest</directory>
+        <testsuite name="LibraryTest">
+            <directory>./LibraryTest</directory>
         </testsuite>
     </testsuites>
     <php>

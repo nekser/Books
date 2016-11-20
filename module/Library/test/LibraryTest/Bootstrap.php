@@ -1,6 +1,6 @@
 <?php
 
-namespace ApplicationTest;
+namespace LibraryTest;
 
 use RuntimeException;
 use Zend\Loader\AutoloaderFactory;

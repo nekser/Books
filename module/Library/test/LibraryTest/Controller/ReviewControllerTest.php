@@ -1,15 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nikolay
- * Date: 11/20/16
- * Time: 7:39 PM
- */
 
 namespace LibraryTest\Controller;
 
+use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
-class ReviewControllerTest
+class ReviewControllerTest extends AbstractHttpControllerTestCase
 {
 
 }

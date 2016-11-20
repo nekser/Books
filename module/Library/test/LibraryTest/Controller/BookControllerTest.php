@@ -1,9 +1,9 @@
 <?php
-namespace ApplicationTest\Controller;
+namespace LibraryTest\Controller;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
-class IndexControllerTest extends AbstractHttpControllerTestCase
+class BookControllerTest extends AbstractHttpControllerTestCase
 {
     public function setUp()
     {
