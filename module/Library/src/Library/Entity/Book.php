@@ -157,9 +157,7 @@ class Book
      */
     public function getCover()
     {
-        if (file_exists('public/' . $this->cover)
-            && !is_dir('public/' . $this->cover)
-        ) {
+        if (!is_null($this->cover)) {
             return $this->cover;
         } else {
             return self::DEFAULT_COVER;

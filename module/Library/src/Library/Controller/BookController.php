@@ -3,11 +3,28 @@ namespace Library\Controller;
 
 use Library\Form\BookForm;
 use Library\Form\ReviewForm;
+use Library\Service\BookServiceInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
 class BookController extends AbstractActionController
 {
+    /** @var  BookServiceInterface */
+    private $bookService;
+
+    /**
+     * @return BookServiceInterface
+     */
+    public function getBookService()
+    {
+        return $this->bookService;
+    }
+
+    public function __construct(BookServiceInterface $bookService)
+    {
+        $this->bookService = $bookService;
+    }
+
     public function indexAction()
     {
         $sm = $this->getServiceLocator();
@@ -15,8 +32,7 @@ class BookController extends AbstractActionController
         $auth = $sm
             ->get('zfcuser_auth_service');
 
-        /** @var \Library\Service\BookService $bookService */
-        $bookService = $sm->get('BookService');
+        $bookService = $this->getBookService();
 
         $books = $bookService->fetchAll($auth->getIdentity()->getId());
 
@@ -32,8 +48,7 @@ class BookController extends AbstractActionController
         $auth = $sm
             ->get('zfcuser_auth_service');
 
-        /** @var \Library\Service\BookService $bookService */
-        $bookService = $sm->get('BookService');
+        $bookService = $this->getBookService();
         $form = new BookForm();
         $form->get('submit')->setValue('Add');
 
@@ -70,9 +85,7 @@ class BookController extends AbstractActionController
 
     public function viewAction()
     {
-        /** @var \Library\Service\BookService $bookService */
-        $bookService = $this->getServiceLocator()
-            ->get('BookService');
+        $bookService = $this->getBookService();
 
         $id = (int)$this->params()->fromRoute('id', 0);
         if (!$id) {
@@ -100,9 +113,7 @@ class BookController extends AbstractActionController
 
     public function editAction()
     {
-        /** @var \Library\Service\BookService $bookService */
-        $bookService = $this->getServiceLocator()
-            ->get('BookService');
+        $bookService = $this->getBookService();
 
         $id = (int)$this->params()->fromRoute('id', 0);
         if (!$id) {
@@ -157,9 +168,7 @@ class BookController extends AbstractActionController
 
     public function deleteAction()
     {
-        /** @var \Library\Service\BookService $bookService */
-        $bookService = $this->getServiceLocator()
-            ->get('BookService');
+        $bookService = $this->getBookService();
 
         $id = (int)$this->params()->fromRoute('id', 0);
         if (!$id) {

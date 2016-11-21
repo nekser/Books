@@ -9,7 +9,7 @@ class BookControllerFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $controller = new BookController();
+        $controller = new BookController($serviceLocator->get('BookService'));
         $controller->setServiceLocator($serviceLocator);
         return $controller;
     }

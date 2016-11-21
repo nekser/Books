@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit bootstrap="BookUserTest/Bootstrap.php"
+         convertErrorsToExceptions="false"
+         convertNoticesToExceptions="false"
+         convertWarningsToExceptions="false"
+         processIsolation="true"
+         colors="true">>
+    <testsuites>
+        <testsuite name="BookUserTest">
+            <directory>./BookUserTest</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <ini name="display_errors" value="On"/>
+        <ini name="display_startup_errors" value="On"/>
+    </php>
+</phpunit>

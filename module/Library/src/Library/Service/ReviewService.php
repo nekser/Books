@@ -2,47 +2,68 @@
 
 namespace Library\Service;
 
-
+use Doctrine\ORM\EntityManagerInterface;
 use Library\Entity\Review;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use ZfcUser\Controller\Plugin\ZfcUserAuthentication;
+use Zend\Authentication\AuthenticationServiceInterface;
 
-class ReviewService implements ServiceLocatorAwareInterface
+class ReviewService implements ReviewServiceInterface
 {
-    use ServiceLocatorAwareTrait;
+    /** @var  EntityManagerInterface */
+    private $entityManager;
+
+    /**
+     * @return EntityManagerInterface
+     */
+    public function getEntityManager()
+    {
+        return $this->entityManager;
+    }
+
+    /** @var AuthenticationServiceInterface */
+    private $authenticationService;
+
+    /**
+     * @return AuthenticationServiceInterface
+     */
+    public function getAuthService()
+    {
+        return $this->authenticationService;
+    }
+
+    public function __construct(EntityManagerInterface $entityManager, AuthenticationServiceInterface $authenticationService)
+    {
+        $this->entityManager = $entityManager;
+        $this->authenticationService = $authenticationService;
+    }
 
     /**
      * @param $data
      * @param $user
-     * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     public function createReview($data, $user = null)
     {
-        /** @var \Doctrine\ORM\EntityManager $em */
-        $em = $this->getServiceLocator()
-            ->get('em');
-        /** @var ZfcUserAuthentication $auth */
-        $auth = $this->getServiceLocator()
-            ->get('zfcuser_auth_service');
-        /** @var \Library\Entity\Book $book */
-        $book = $em->getRepository('\Library\Entity\Book')
-            ->find($data['book']);
         /** @var \BookUser\Entity\User $user */
-        $user = $auth->getIdentity();
+        $user = $this->getAuthService()
+            ->getIdentity();
         if (!$user) {
-            throw new \Exception('User is not found');
+            throw new \InvalidArgumentException('User is not found');
         }
+
+        /** @var \Library\Entity\Book $book */
+        $book = $this->getEntityManager()
+            ->getRepository('\Library\Entity\Book')
+            ->find($data['book']);
         if (!$book) {
-            throw new \Exception('Book is not found');
+            throw new \InvalidArgumentException('Book is not found');
         }
         $review = new Review();
         $review->exchangeArray($data);
         $review->setUser($user);
         $review->setBook($book);
         $review->setCreatedAt(time());
-        $em->persist($review);
-        $em->flush();
 
+        $this->getEntityManager()->persist($review);
+        $this->getEntityManager()->flush();
     }
 }

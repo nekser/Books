@@ -2,15 +2,30 @@
 namespace Library\Controller;
 
 use Library\Form\ReviewForm;
+use Library\Service\ReviewServiceInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 
 class ReviewController extends AbstractActionController
 {
+    /** @var  ReviewServiceInterface */
+    private $reviewService;
+
+    /**
+     * @return ReviewServiceInterface
+     */
+    public function getReviewService()
+    {
+        return $this->reviewService;
+    }
+
+    public function __construct(ReviewServiceInterface $reviewService)
+    {
+        $this->reviewService = $reviewService;
+    }
+
     public function addAction()
     {
-        $sm = $this->getServiceLocator();
-        /** @var \Library\Service\ReviewService $reviewService */
-        $reviewService = $sm->get('ReviewService');
+        $reviewService = $this->getReviewService();
         $form = new ReviewForm();
         /**  @var \Zend\Http\Request $request */
         $request = $this->getRequest();

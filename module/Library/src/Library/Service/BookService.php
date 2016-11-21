@@ -1,15 +1,40 @@
 <?php
 namespace Library\Service;
 
-use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\EntityManagerInterface;
 use Library\Entity\Book;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Zend\Authentication\AuthenticationServiceInterface;
 use ZfcUser\Controller\Plugin\ZfcUserAuthentication;
 
-class BookService implements ServiceLocatorAwareInterface
+class BookService implements BookServiceInterface
 {
-    use ServiceLocatorAwareTrait;
+    /** @var  EntityManagerInterface */
+    private $entityManager;
+
+    /**
+     * @return EntityManagerInterface
+     */
+    public function getEntityManager()
+    {
+        return $this->entityManager;
+    }
+
+    /** @var AuthenticationServiceInterface */
+    private $authenticationService;
+
+    /**
+     * @return AuthenticationServiceInterface
+     */
+    public function getAuthService()
+    {
+        return $this->authenticationService;
+    }
+
+    public function __construct(EntityManagerInterface $entityManager, AuthenticationServiceInterface $authenticationService)
+    {
+        $this->entityManager = $entityManager;
+        $this->authenticationService = $authenticationService;
+    }
 
     /**
      * @param int | null $userId
@@ -17,9 +42,7 @@ class BookService implements ServiceLocatorAwareInterface
      */
     public function fetchAll($userId = null)
     {
-        $sm = $this->getServiceLocator();
-        /** @var \Doctrine\ORM\EntityManager $em */
-        $em = $sm->get('em');
+        $em = $this->getEntityManager();
         $qb = $em->createQueryBuilder();
 
         $query = $qb->select('b')
@@ -43,12 +66,9 @@ class BookService implements ServiceLocatorAwareInterface
      */
     public function fetch($id, $checkIdentity = false)
     {
-        /** @var \Doctrine\ORM\EntityManager $em */
-        $em = $this->getServiceLocator()
-            ->get('em');
+        $em = $this->getEntityManager();
         /** @var ZfcUserAuthentication $auth */
-        $auth = $this->getServiceLocator()
-            ->get('zfcuser_auth_service');
+        $auth = $this->getAuthService();
 
         $qb = $em->createQueryBuilder();
 
@@ -73,12 +93,9 @@ class BookService implements ServiceLocatorAwareInterface
      */
     public function createBook($data)
     {
-        /** @var \Doctrine\ORM\EntityManager $em */
-        $em = $this->getServiceLocator()->get('em');
-
+        $em = $this->getEntityManager();
         /** @var ZfcUserAuthentication $auth */
-        $auth = $this->getServiceLocator()
-            ->get('zfcuser_auth_service');
+        $auth = $this->getAuthService();
 
         $user = $auth->getIdentity();
         if (!$user) {
@@ -92,14 +109,15 @@ class BookService implements ServiceLocatorAwareInterface
         $em->flush();
     }
 
+    /**
+     * @param $data
+     * @throws \Exception
+     */
     public function updateBook($data)
     {
-        /** @var \Doctrine\ORM\EntityManager $em */
-        $em = $this->getServiceLocator()
-            ->get('em');
+        $em = $this->getEntityManager();
         /** @var ZfcUserAuthentication $auth */
-        $auth = $this->getServiceLocator()
-            ->get('zfcuser_auth_service');
+        $auth = $this->getAuthService();
 
         $id = $data['id'];
         try {
@@ -137,12 +155,9 @@ class BookService implements ServiceLocatorAwareInterface
      */
     public function deleteBook($id)
     {
-        /** @var \Doctrine\ORM\EntityManager $em */
-        $em = $this->getServiceLocator()
-            ->get('em');
+        $em = $this->getEntityManager();
         /** @var ZfcUserAuthentication $auth */
-        $auth = $this->getServiceLocator()
-            ->get('zfcuser_auth_service');
+        $auth = $this->getAuthService();
 
         try {
             /** @var \Library\Entity\Book $book */
@@ -158,5 +173,4 @@ class BookService implements ServiceLocatorAwareInterface
             throw new \Exception('Error while deleting book' . $e->getTraceAsString());
         }
     }
-
 }
