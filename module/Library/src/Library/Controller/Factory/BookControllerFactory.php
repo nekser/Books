@@ -9,7 +9,10 @@ class BookControllerFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $controller = new BookController($serviceLocator->get('BookService'));
+        $controller = new BookController(
+            $serviceLocator->get('BookService'),
+            $serviceLocator->get('zfcuser_auth_service')
+        );
         $controller->setServiceLocator($serviceLocator);
         return $controller;
     }

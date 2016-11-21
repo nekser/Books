@@ -4,6 +4,7 @@ namespace Library\Controller;
 use Library\Form\BookForm;
 use Library\Form\ReviewForm;
 use Library\Service\BookServiceInterface;
+use Zend\Authentication\AuthenticationServiceInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
@@ -20,17 +21,28 @@ class BookController extends AbstractActionController
         return $this->bookService;
     }
 
-    public function __construct(BookServiceInterface $bookService)
+    /** @var AuthenticationServiceInterface */
+    private $authenticationService;
+
+    /**
+     * @return AuthenticationServiceInterface
+     */
+    public function getAuthService()
+    {
+        return $this->authenticationService;
+    }
+
+    public function __construct(BookServiceInterface $bookService, AuthenticationServiceInterface $authService)
     {
         $this->bookService = $bookService;
+        $this->authenticationService = $authService;
     }
 
     public function indexAction()
     {
         $sm = $this->getServiceLocator();
 
-        $auth = $sm
-            ->get('zfcuser_auth_service');
+        $auth = $this->getAuthService();
 
         $bookService = $this->getBookService();
 
@@ -43,12 +55,9 @@ class BookController extends AbstractActionController
 
     public function addAction()
     {
-        $sm = $this->getServiceLocator();
-
-        $auth = $sm
-            ->get('zfcuser_auth_service');
-
+        $auth = $this->getAuthService();
         $bookService = $this->getBookService();
+
         $form = new BookForm();
         $form->get('submit')->setValue('Add');
 
@@ -60,8 +69,6 @@ class BookController extends AbstractActionController
                 $request->getFiles()->toArray()
             ));
             if ($form->isValid()) {
-                $files = $request->getFiles()->toArray();
-                $cover = $files["image-file"];
                 try {
                     $data = $form->getData();
                     $data['cover'] = str_replace("public/", "", $data['image-file']['tmp_name']);
@@ -119,8 +126,7 @@ class BookController extends AbstractActionController
         if (!$id) {
             return $this->notFoundAction();
         }
-        $auth = $this->getServiceLocator()
-            ->get('zfcuser_auth_service');
+        $auth = $this->getAuthService();
 
         $form = new BookForm();
         $form->get('submit')->setValue('Save');

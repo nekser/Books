@@ -3,6 +3,7 @@ namespace Library\Controller;
 
 use Library\Form\ReviewForm;
 use Library\Service\ReviewServiceInterface;
+use Zend\Authentication\AuthenticationServiceInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 
 class ReviewController extends AbstractActionController
@@ -16,6 +17,17 @@ class ReviewController extends AbstractActionController
     public function getReviewService()
     {
         return $this->reviewService;
+    }
+
+    /** @var AuthenticationServiceInterface */
+    private $authenticationService;
+
+    /**
+     * @return AuthenticationServiceInterface
+     */
+    public function getAuthService()
+    {
+        return $this->authenticationService;
     }
 
     public function __construct(ReviewServiceInterface $reviewService)
