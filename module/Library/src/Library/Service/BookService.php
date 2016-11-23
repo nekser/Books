@@ -43,6 +43,7 @@ class BookService implements BookServiceInterface
     public function fetchAll($userId = null)
     {
         $em = $this->getEntityManager();
+
         $qb = $em->createQueryBuilder();
 
         $query = $qb->select('b')

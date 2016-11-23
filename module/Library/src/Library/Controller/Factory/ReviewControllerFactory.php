@@ -10,8 +10,10 @@ class ReviewControllerFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $controller = new ReviewController(
-            $serviceLocator->get('ReviewService'),
-            $serviceLocator->get('zfcuser_auth_service')
+            $serviceLocator->getServiceLocator()
+                ->get('ReviewService'),
+            $serviceLocator->getServiceLocator()
+                ->get('zfcuser_auth_service')
         );
         $controller->setServiceLocator($serviceLocator);
         return $controller;
