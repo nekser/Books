@@ -126,6 +126,7 @@ class BookController extends AbstractActionController
         if (!$id) {
             return $this->notFoundAction();
         }
+        /** @var AuthenticationServiceInterface $auth */
         $auth = $this->getAuthService();
 
         $form = new BookForm();
@@ -133,7 +134,7 @@ class BookController extends AbstractActionController
         /** @var \Zend\Http\Request $request */
         $request = $this->getRequest();
         if (!$request->isPost()) {
-            $book = $bookService->fetch($id, true);
+            $book = $bookService->fetch($id, $auth->getIdentity()->getId());
             if (!$book) {
                 return $this->notFoundAction();
             }

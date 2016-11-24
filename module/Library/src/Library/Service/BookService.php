@@ -65,11 +65,9 @@ class BookService implements BookServiceInterface
      * @param $checkIdentity
      * @return null | \Library\Entity\Book
      */
-    public function fetch($id, $checkIdentity = false)
+    public function fetch($id, $userID = null)
     {
         $em = $this->getEntityManager();
-        /** @var ZfcUserAuthentication $auth */
-        $auth = $this->getAuthService();
 
         $qb = $em->createQueryBuilder();
 
@@ -77,9 +75,9 @@ class BookService implements BookServiceInterface
             ->from('\Library\Entity\Book', 'b')
             ->where($qb->expr()->eq('b.id', ':id'))
             ->setParameter('id', $id);
-        if ($checkIdentity) {
+        if ($userID) {
             $query->andWhere($qb->expr()->eq('IDENTITY(b.user)', ':userId'))
-                ->setParameter('userId', $auth->getIdentity()->getId());
+                ->setParameter('userId', $userID);
         }
         $query->setMaxResults(1);
 
