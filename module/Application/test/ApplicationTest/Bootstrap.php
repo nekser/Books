@@ -13,7 +13,7 @@ chdir(__DIR__);
 /**
  * Test bootstrap, for setting up autoloading
  */
-class Bootstrap
+class ApplicationBootstrap
 {
     protected static $serviceManager;
 
@@ -105,5 +105,5 @@ class Bootstrap
     }
 }
 
-Bootstrap::init();
-Bootstrap::chroot();
+ApplicationBootstrap::init();
+ApplicationBootstrap::chroot();

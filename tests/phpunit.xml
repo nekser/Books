@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="bootstrap.php"
+         colors="true"
+         verbose="true">
+    <testsuites>
+        <testsuite name="All Modules">
+            <directory>../module/Application/test</directory>
+            <directory>../module/Library/test</directory>
+            <directory>../module/BookUser/test</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist addUncoveredFilesFromWhitelist="true">
+            <directory>../module/Application/src/</directory>
+            <directory>../module/Library/src/</directory>
+            <directory>../module/BookUser/src/</directory>
+        </whitelist>
+        <blacklist>
+            <directory suffix=".php">../vendor</directory>
+            <directory suffix=".php">../config</directory>
+            <file>../module/Application/Module.php</file>
+            <file>../module/Application/test/ApplicationTest/Bootstrap.php</file>
+            <file>../module/Library/Module.php</file>
+            <file>../module/Library/test/LibraryTest/Bootstrap.php</file>
+            <file>../module/BookUser/Module.php</file>
+            <file>../module/BookUser/test/BookUserTest/Bootstrap.php</file>
+        </blacklist>
+    </filter>
+</phpunit>
