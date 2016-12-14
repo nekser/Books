@@ -6,6 +6,6 @@ class ReviewControllerTest extends BaseControllerTestCase
 {
     public function testAddAction()
     {
-        $this->assertTrue(true);
+        $this->markTestSkipped();
     }
 }

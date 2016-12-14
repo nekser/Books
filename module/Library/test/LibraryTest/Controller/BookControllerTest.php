@@ -7,7 +7,7 @@ use Library\Controller\BookController;
 class BookControllerTest extends BaseControllerTestCase
 {
 
-    public function testIndexActionForbiddenForNonauthorizedUser()
+    public function testIndexActionForbiddenForNonAuthorizedUser()
     {
         $this->dispatch('/book');
         $this->assertResponseStatusCode(403);
