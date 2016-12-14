@@ -1,36 +1,39 @@
 <?php
 namespace LibraryTest\Service;
 
+use Library\Service\BookService;
+use LibraryTest\Traits\DoctrineTestCaseTrait;
+
 class BookServiceTest extends \PHPUnit_Framework_TestCase
 {
+    use DoctrineTestCaseTrait;
+
     public function setUp()
     {
         parent::setUp();
     }
 
-    public function testCreateBookIsSuccessful()
+    /**
+     * @expectedException        \Exception
+     * @expectedExceptionMessage User is not found
+     */
+    public function testCreateBookWithoutUserThroughsException()
     {
+        $em = $this->getEntityManagerMock();
 
-    }
+        $authMock = $this->getMock(
+            'Zend\Authentication\AuthenticationServiceInterface'
+        );
+        $authMock->expects($this->any())
+            ->method('getIdentity')
+            ->will($this->returnValue(null));
 
-    public function testUpdateBookIsSuccessful()
-    {
 
-    }
+        $service = new BookService($em, $authMock);
 
-    public function testDeleteBookIsSuccessful()
-    {
+        $data = array('stub');
 
-    }
-
-    public function testFetchAllIsSuccessful()
-    {
-
-    }
-
-    public function testFetchSingleBookIsSuccessful()
-    {
-
+        $service->createBook($data);
     }
 
 }

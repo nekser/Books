@@ -62,7 +62,7 @@ class BookService implements BookServiceInterface
 
     /**
      * @param $id
-     * @param $checkIdentity
+     * @param $userID
      * @return null | \Library\Entity\Book
      */
     public function fetch($id, $userID = null)

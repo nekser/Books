@@ -2,15 +2,10 @@
 
 namespace LibraryTest\Controller;
 
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
-
-class ReviewControllerTest extends AbstractHttpControllerTestCase
+class ReviewControllerTest extends BaseControllerTestCase
 {
-    public function setUp()
+    public function testAddAction()
     {
-        $this->setApplicationConfig(
-            include '/var/www/zf/config/application.config.php'
-        );
-        parent::setUp();
+        $this->assertTrue(true);
     }
 }

@@ -40,8 +40,6 @@ class BookController extends AbstractActionController
 
     public function indexAction()
     {
-        $sm = $this->getServiceLocator();
-
         $auth = $this->getAuthService();
 
         $bookService = $this->getBookService();
@@ -55,7 +53,6 @@ class BookController extends AbstractActionController
 
     public function addAction()
     {
-        $auth = $this->getAuthService();
         $bookService = $this->getBookService();
 
         $form = new BookForm();

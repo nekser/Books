@@ -7,7 +7,6 @@ return array(
         'ZfcUserDoctrineORM',
         'BjyAuthorize',
         'Application',
-//        'ZendDeveloperTools',
         'DoctrineModule',
         'DoctrineORMModule',
         'Library',

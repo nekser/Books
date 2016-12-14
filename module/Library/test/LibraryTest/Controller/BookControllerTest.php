@@ -2,17 +2,10 @@
 namespace LibraryTest\Controller;
 
 use BjyAuthorize\Exception\UnAuthorizedException;
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Library\Controller\BookController;
 
-class BookControllerTest extends AbstractHttpControllerTestCase
+class BookControllerTest extends BaseControllerTestCase
 {
-    public function setUp()
-    {
-        $this->setApplicationConfig(
-            include '/var/www/zf/config/application.config.php'
-        );
-        parent::setUp();
-    }
 
     public function testIndexActionForbiddenForNonauthorizedUser()
     {
@@ -21,28 +14,47 @@ class BookControllerTest extends AbstractHttpControllerTestCase
         $this->assertApplicationException(UnAuthorizedException::class);
     }
 
-    public function testIndexActionCanBeAccessed()
+    public function testIndexAction()
     {
-        $mockBjy = $this->getMock('BjyAuthorize\Service\Authorize',
-            array("isAllowed"),
-            array(
-                $this->getApplicationConfig(),
-                $this->getApplication()->getServiceManager()
-            )
+        $em = $this->getEntityManagerMock();
+        $this->serviceLocator->setService('em', $em);
+
+        $ZfcUserMock = $this->getMock('ZfcUser\Entity\User');
+        $ZfcUserMock->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue('1'));
+        $authMock = $this->getMock(
+            'Zend\Authentication\AuthenticationServiceInterface'
+        );
+        $authMock->expects($this->any())
+            ->method('hasIdentity')
+            ->will($this->returnValue(true));
+        $authMock->expects($this->any())
+            ->method('getIdentity')
+            ->will($this->returnValue($ZfcUserMock));
+        $this->serviceLocator->setService(
+            'zfcuser_auth_service', $authMock
         );
 
-        // Bypass auth, force true
-        $mockBjy->expects($this->any())
-            ->method('isAllowed')
+        $bookServiceMock = $this->getMockBuilder('Library\Service\BookService')
+            ->disableOriginalConstructor()
+            ->setMethods(array('fetchAll'))
+            ->getMock();
+
+        $bookServiceMock->expects($this->any())
+            ->method('fetchAll')
             ->will($this->returnValue(true));
 
-        // Overriding BjyAuthorize\Service\Authorize service
-        $this->getApplication()
-            ->getServiceManager()
-            ->setAllowOverride(true)
-            ->setService('BjyAuthorize\Service\Authorize', $mockBjy);
+        $this->serviceLocator->setService('BookService', $bookServiceMock);
 
-        $this->dispatch('/book');
-        $this->assertResponseStatusCode(200);
+        $controller = new BookController($bookServiceMock, $authMock);
+
+        $result = $controller->indexAction();
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $result);
+        $this->assertFalse(is_null($result->getVariable('books')));
+
+        $books = $result->getVariable('books');
+        $this->assertTrue($books);
     }
 }

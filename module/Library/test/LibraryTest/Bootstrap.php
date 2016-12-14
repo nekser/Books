@@ -85,6 +85,7 @@ class Bootstrap
                 'autoregister_zf' => true,
                 'namespaces' => array(
                     __NAMESPACE__ => __DIR__ . '/' . __NAMESPACE__,
+                    'LibraryTest' => __DIR__
                 ),
             ),
         ));

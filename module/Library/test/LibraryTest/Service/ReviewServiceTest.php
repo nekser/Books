@@ -1,34 +1,78 @@
 <?php
 namespace LibraryTest\Service;
 
-use BookUser\Entity\User;
+use Doctrine\Common\Persistence\ObjectRepository;
 use Library\Service\ReviewService;
-use LibraryTest\Bootstrap;
-use Psr\Log\InvalidArgumentException;
+use LibraryTest\Traits\DoctrineTestCaseTrait;
 
 class ReviewServiceTest extends \PHPUnit_Framework_TestCase
 {
-    public function testReviewCreatedSuccesfully()
-    {
-        $reviewService = Bootstrap::getServiceManager()->get('ReviewService');
-        $data = array(
-            'text' => 'TestReviewText',
-            'book' => 100000000
-        );
-        $user = new User();
-        $user->setId(1000000000);
+    use DoctrineTestCaseTrait;
 
-        $reviewService->createReview($data, $user);
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Book is not found
+     */
+    public function testReviewsNotCreatedWhenBookIsInvalid()
+    {
+        $em = $this->getEntityManagerMock();
+
+        $bookRepositoryMock = $this->getMock(ObjectRepository::class);
+        $bookRepositoryMock->expects($this->any())
+            ->method('find')
+            ->with($this->anything())
+            ->willReturn(null);
+
+
+        $em->expects($this->any())
+            ->method('getRepository')
+            ->with('\Library\Entity\Book')
+            ->willReturn($bookRepositoryMock);
+
+        $ZfcUserMock = $this->getMock('ZfcUser\Entity\User');
+        $ZfcUserMock->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue('1'));
+        $authMock = $this->getMock(
+            'Zend\Authentication\AuthenticationServiceInterface'
+        );
+        $authMock->expects($this->any())
+            ->method('hasIdentity')
+            ->will($this->returnValue(true));
+        $authMock->expects($this->any())
+            ->method('getIdentity')
+            ->will($this->returnValue($ZfcUserMock));
+
+        $service = new ReviewService($em, $authMock);
+
+        $data = array('book' => 'stub');
+
+        $service->createReview($data);
+
+
+        $this->assertTrue(true);
     }
 
-    public function testReviewNotCreatedWithoutUser()
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage User is not found
+     */
+    public function testReviewNotCreatedWhenUserIsInvalid()
     {
-        $reviewService = Bootstrap::getServiceManager()->get('ReviewService');
-        $data = array(
-            'book' => 1000
+        $em = $this->getEntityManagerMock();
+        $authMock = $this->getMock(
+            'Zend\Authentication\AuthenticationServiceInterface'
         );
-        $user = null;
-        $reviewService->createReview($data, $user);
-        $this->setExpectedException(InvalidArgumentException::class, 'User is not found ');
+        $authMock->expects($this->any())
+            ->method('getIdentity')
+            ->will($this->returnValue(null));
+
+        $service = new ReviewService($em, $authMock);
+
+        $data = array('stub');
+
+        $service->createReview($data);
+
+        $this->assertTrue(true);
     }
 }
